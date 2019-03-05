@@ -27,6 +27,7 @@ private func withSessionOptions<T>(fn: (OpaquePointer) throws -> T) rethrows -> 
 
     // Provide an initial default outbound concurrent stream limit of 100.
     nghttp2_option_set_peer_max_concurrent_streams(optionPtr, 100)
+    nghttp2_option_set_no_http_messaging(optionPtr, 1)
     return try fn(optionPtr!)
 }
 
