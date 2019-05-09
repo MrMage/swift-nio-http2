@@ -689,7 +689,10 @@ class NGHTTP2Session {
             return
         }
 
-        let streamData = self.streamIDManager.getStreamData(for: networkStreamID)!
+        guard let streamData = self.streamIDManager.getStreamData(for: networkStreamID), streamData.active else {
+            return
+        }
+
         let blockType = streamData.newOutboundHeaderBlock(block: headers)
         if blockType == .trailer {
             // Trailers are a tricky beast, as they must be submitted via the data provider. They count as EOF.
