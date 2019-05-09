@@ -690,6 +690,7 @@ class NGHTTP2Session {
         }
 
         guard let streamData = self.streamIDManager.getStreamData(for: networkStreamID), streamData.active else {
+            print("[NIOHTTP2] ERROR: sendHeaders called on inactive stream")
             return
         }
 
