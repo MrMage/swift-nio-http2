@@ -115,6 +115,7 @@ final class HTTP2StreamChannel: Channel, ChannelCore {
 
         f.whenFailure { (error: Error) in
             if self.streamID.networkStreamID != nil {
+                print("RST_STREAM: configure.closedWhileOpen")
                 self.closedWhileOpen()
             } else {
                 self.errorEncountered(error: error)
@@ -315,6 +316,7 @@ final class HTTP2StreamChannel: Channel, ChannelCore {
             }
         }
 
+        print("RST_STREAM: close0")
         self.closedWhileOpen()
     }
 
@@ -341,6 +343,7 @@ final class HTTP2StreamChannel: Channel, ChannelCore {
             return
         }
 
+        print("RST_STREAM: closedWhileOpen")
         self.state.beginClosing()
         let resetFrame = HTTP2Frame(streamID: self.streamID, payload: .rstStream(.cancel))
         self.receiveOutboundFrame(resetFrame, promise: nil)

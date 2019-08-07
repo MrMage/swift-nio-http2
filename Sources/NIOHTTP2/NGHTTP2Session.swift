@@ -448,6 +448,7 @@ class NGHTTP2Session {
             // we explicitly suppress priority frames at this time.
             return
         case NGHTTP2_RST_STREAM.rawValue:
+            print("RST_STREAM: onFrameReceiveCallback")
             nioFramePayload = .rstStream(HTTP2ErrorCode(frame.rst_stream.error_code))
         case NGHTTP2_SETTINGS.rawValue:
             var settings: [HTTP2Setting] = []
@@ -822,6 +823,7 @@ class NGHTTP2Session {
     }
 
     private func sendRstStream(frame: HTTP2Frame) {
+        print("RST_STREAM: sendRstStream")
         guard case .rstStream(let errorCode) = frame.payload else {
             preconditionFailure("Send rstStream attempted on non-rst-stream frame \(frame)")
         }
