@@ -63,6 +63,7 @@ private func evacuateSession(_ userData: UnsafeMutableRawPointer) -> NGHTTP2Sess
 private func errorCallback(session: OpaquePointer?, msg: UnsafePointer<CChar>?, len: Int, userData: UnsafeMutableRawPointer?) -> Int32 {
     let errorString = msg != nil ? String(cString: msg!) : ""
     print("nghttp2 error: \(errorString)")
+	fflush(stdout)
     return 0
 }
 
@@ -449,6 +450,7 @@ class NGHTTP2Session {
             return
         case NGHTTP2_RST_STREAM.rawValue:
             print("RST_STREAM: onFrameReceiveCallback")
+			fflush(stdout)
             nioFramePayload = .rstStream(HTTP2ErrorCode(frame.rst_stream.error_code))
         case NGHTTP2_SETTINGS.rawValue:
             var settings: [HTTP2Setting] = []
@@ -692,6 +694,7 @@ class NGHTTP2Session {
 
         guard let streamData = self.streamIDManager.getStreamData(for: networkStreamID), streamData.active else {
             print("[NIOHTTP2] ERROR: sendHeaders called on inactive stream")
+			fflush(stdout)
             return
         }
 
@@ -824,6 +827,7 @@ class NGHTTP2Session {
 
     private func sendRstStream(frame: HTTP2Frame) {
         print("RST_STREAM: sendRstStream")
+		fflush(stdout)
         guard case .rstStream(let errorCode) = frame.payload else {
             preconditionFailure("Send rstStream attempted on non-rst-stream frame \(frame)")
         }
