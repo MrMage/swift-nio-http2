@@ -87,11 +87,8 @@ public final class HTTP2StreamMultiplexer: ChannelInboundHandler, ChannelOutboun
     }
     
     public func channelInactive(ctx: ChannelHandlerContext) {
-		fputs("channelInactive\n", stderr)
         for channel in self.streams.values {
-			fputs("channel.eventLoop.inEventLoop = \(channel.eventLoop.inEventLoop)\n", stderr)
-			// Disabled to see if that avoids a crash.
-            //channel.receiveStreamClosed(nil)
+            channel.receiveStreamClosed(nil)
         }
     }
 
